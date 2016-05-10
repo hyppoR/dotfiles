@@ -1,0 +1,81 @@
+" Grandement inspiré par : http://bepo.fr/wiki/Vim
+
+" {W} -> [É]
+" ––––––––––
+" On ramppe W sur É :
+noremap é w
+noremap É W
+
+onoremap aé aw
+onoremap aÉ aW
+onoremap ip iw
+onoremap iÉ iW
+" Pour faciliter les manipulations de fenêtre, on utilise {W} comme un Ctrl+W :
+noremap w <C-w>
+noremap W <C-w><C-w>
+
+" [HJKL] -> {CTSR}
+" {cr} = « gauche / droite »
+noremap c h
+noremap r l
+" {ts} = « haut / bas »
+noremap t j
+noremap s k
+" {CR} = « haut / bas de l'écran »
+noremap C H
+noremap R L
+" {TS} = « joindre / aide »
+noremap T J
+noremap S K
+
+" {HJKL} <- [CTSR]
+" {J} = « Jusqu'à »             (j = suivant, J = suivant)
+noremap j t
+noremap J T
+" {L} = « Changer »             (l = attend un mvt, L = jusqu'à la fin de la ligne )
+noremap l c
+noremap L C
+" {H} = « Remplacer »           (h = un caractère, H = reste en « Remplacer »)
+noremap h r
+noremap H R
+" {K} = « Substituer »          (k = un caractère, K = une ligne)
+noremap k s
+noremap K s
+
+" Désambiguïsation de {g}
+" –––––––––––––––––––––
+noremap gn :tabnew<CR>
+noremap gq :tabclose<CR>
+" ligne écran précédente / suivante (à l'interieur d'une phrase)
+noremap gs gk
+noremap gt gj
+" onglet précédant / suivant
+noremap gb gT
+noremap gé gt
+" {gB} / {gÉ} pour aller au premier / dernier onglet
+noremap gB :exe "silent! tabfirst"<CR>
+noremap gÉ :exe "silent! tablast"<CR>
+noremap g" g0
+
+" <> en direct
+" ––––––––––––
+noremap « <
+noremap » >
+
+" Remaper la gestion des fenêtres
+" ———————————————————————————————
+noremap wt <C-w>j
+noremap ws <C-w>k
+noremap wc <C-w>h
+noremap wr <C-w>l
+noremap wd <C-w>c
+noremap wo <C-w>s
+noremap wp <C-w>o
+noremap w<SPACE> :split<CR>
+noremap w<CR> :vsplit<CR>
+
+" Remaper Esc par èè
+inoremap èè <Esc>
+vnoremap èè <Esc>
+inoremap <Esc> <nop>
+vnoremap <Esc> <nop>
