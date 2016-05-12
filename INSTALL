@@ -1,0 +1,29 @@
+#!/bin/bash
+
+install() {
+
+    BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+    git submodule update --init --recursive
+
+    # bash
+    ln -sf ${BASEDIR}/bashrc ~/.bashrc
+    ln -sf ${BASEDIR}/profile ~/.profile
+    ln -sf ${BASEDIR}/bash_logout ~/.bash_logout
+
+    # vim
+    ln -sf ${BASEDIR}/vimrc ~/.vimrc
+    ln -sf ${BASEDIR}/vimrc.bepo ~/.vimrc.bepo
+    rm -f ~/.vim
+    ln -sf ${BASEDIR}/vim/ ~/.vim
+
+    # git
+    ln -sf ${BASEDIR}/gitconfig ~/.gitconfig
+
+}
+
+read -p "This may overwrite existing files in your home directory. Are you sure? (y/N) " -n 1;
+echo "";
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    install;
+fi;
