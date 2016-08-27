@@ -1,16 +1,170 @@
+" ☻ ☺	
+" (∂_∂)
+" → ∞ ✓ ✗ ♂ ♀ ♫ ♪ π 
+"
+
+" {{{ → [ Résumé ]
+"
+"  F1: help
+"  F2: toggle paste
+"  F3: 
+"  F4: 
+"  F5: 
+"  F6: 
+"  F7: 
+"  F8: tagbar
+"  F9: nerdtree
+" F10:
+" F11:
+" F12:
+"
+" }}}
+
+" → [ General ] {{{
+
+set nocompatible " stay Vimproved 8-)
+
+" load pathogen, i put pathogen in the bundle directory for easier maintenance  
 source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
-syntax on				" enable color
-colorscheme desert
-filetype plugin indent on
-set number				" enable numbers
 
+filetype plugin indent on
+
+" load :Man command to use man inside vim
+runtime! ftplugin/man.vim 
+
+syntax on
+colorscheme desert
+
+set autowrite
+set autoread
+set history=1000
+set modeline
+set lazyredraw
+
+set autoindent
+set encoding=utf8
+" allow backspace to remove autoindents, characters and lines
+set backspace=indent,eol,start
+set textwidth=80
+
+" load bépo remaps
 source ~/.vimrc.bepo
 
-autocmd filetype javascript 
-    \ set tabstop=2 |
-    \ set softtabstop=2 |
-    \ set shiftwidth=2 |
+" put backup files in tmp directory to avoid to poluate working directory
+set backupdir=~/tmp,/var/tmp,/tmp
+" put swap files in tmp directory to avoid to poluate working directory
+set directory=~/tmp,/var/tmp,/tmp
+
+" }}}
+
+" → [ Remap ] {{{
+
+set pastetoggle=<F2>
+
+let mapleader=","
+
+noremap <leader>r :source ~/.vimrc<CR>
+
+inoremap èè <Esc>
+vnoremap èè <Esc>
+xnoremap èè <Esc>
+
+nnoremap <silent> <space> :nohl<CR>
+
+" TABS
+noremap <silent> &n :tabnew<CR>
+noremap <silent> &q :tabclose<CR>
+noremap <silent> && :tabonly<CR>
+noremap &b gT
+noremap &é gt
+noremap &B :exe "silent! tabfirst"<CR>
+noremap &É :exe "silent! tablast"<CR>
+noremap <silent> &c :<C-U>exe "tabmove -".v:count1<CR>
+noremap <silent> &r :<C-U>exe "tabmove +".v:count1<CR>
+noremap <silent> &C :tabmove 0<CR>
+noremap <silent> &R :tabmove $<CR>
+
+noremap wvn :vnew<CR>
+
+" }}}
+
+" {{{ → [ Interface ]
+
+set number
+set relativenumber
+set cmdheight=2
+" always show the status line
+set laststatus=2
+" autocompletion in menus
+set wildmenu
+set showcmd
+" don't break lines
+set wrap
+" colorize nbsp
+" highlight NbSp ctermbg=lightgray guibg=lightred
+" match NbSp /\%xa0/
+" show the ASCII of the character under cursor
+" set statusline=%<%f%h%m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+
+" }}}
+
+" {{{ → [ Tabs ]
+
+" convert tabs to spaces
+set expandtab
+" 1 tab = 4 spaces
+set tabstop=4
+" number of spaces removed when pressing <BS> 
+set softtabstop=4
+" number of spaces inserted/removed when indenting
+set shiftwidth=4
+
+" }}}
+
+" {{{ → [ Search ]
+
+set ignorecase
+" don't ignore case when the pattern contains at least one uppercase character
+set smartcase
+" highlight matchnig patterns
+set hlsearch
+" highlight the next matching pattern while typing, use CTRL-L to insert the next character from the match
+set incsearch
+" DON'T wrap around the file after hitting the bottom or the top of the file (while pressing n or N)
+set nowrapscan
+
+" }}}
+
+" {{{ → [ Functions ]
+
+"
+" copied from vim-unimpaired
+"
+function! TemporaryPaste()
+  let s:paste = &paste
+  let s:mouse = &mouse
+  set paste
+  set mouse=
+  augroup setup_paste
+    autocmd!
+    autocmd InsertLeave *
+          \ if exists('s:paste') |
+          \   let &paste = s:paste |
+          \   let &mouse = s:mouse |
+          \   unlet s:paste |
+          \   unlet s:mouse |
+          \ endif |
+          \ autocmd! setup_paste
+  augroup END
+endfunction
+
+nnoremap <silent> yo  :call TemporaryPaste()<CR>o
+nnoremap <silent> yO  :call TemporaryPaste()<CR>O
+
+" }}}
+
+" {{{ → [ Filetypes ]
 
 autocmd filetype python
     \ set tabstop=8 |
@@ -19,67 +173,57 @@ autocmd filetype python
     \ set textwidth=79 |
     \ set fileformat=unix |
 
-let mapleader=","
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" }}}
+
+" {{{ → [ Folding ]
+
+set foldmethod=manual
+
+" }}}
+
+" {{{ → [ Plugins ] 
+
+" Open Tagbar, if Tagbar is already open jump to it
+nmap <silent> <F8> :TagbarOpen fj<CR>
+nmap <silent> <F9> :NERDTreeToggle<CR>
+
+let g:tagbar_map_showproto="k"
+
+" tell ctrlp to ignore files
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|bower_components'
+" tell ycm to use python3.5
 let g:ycm_python_binary_path = '/usr/bin/python3.5'
 
-nnoremap <space> za
+autocmd bufenter * 
+    \ if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) |
+    \   q |
+    \ endif |
 
-set wildmenu				" autocompletion in menus
-set showcmd
-set cmdheight=2
-set laststatus=2
-set foldmethod=indent
-set nofoldenable
-set lazyredraw				" don't redraw while excuting macro
-set encoding=utf8
-set nobackup
-set nowb
-set noswapfile
-set ai                      " autoindent
-set si                      " smartindent
-set wrap                    " break line when longer than screen width
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a: :Tabularize /:\zs<CR>
+vmap <Leader>a: :Tabularize /:\zs<CR>
 
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ 
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git\|bower_components'
-
-" colorise les nbsp
-highlight NbSp ctermbg=lightgray guibg=lightred
-match NbSp /\%xa0/
-
-"
-" MOVEMENTS
-"
-set so=7				" set minimum lines under cursor while scrolling file
-
-"
-" OTHER REMAPS
-"
-noremap <F12> :set paste!<CR>		" toggle paste
-
-"
-" TABS
-"
-set expandtab
-set smarttab
-set shiftwidth=4
-set tabstop=4
-
-"
-" SEARCH
-"
-set hlsearch				" highlight searched pattern
-set smartcase				" 
-set incsearch				" highlight while typing pattern
-nnoremap <leader>n :noh<Cr>	" remove highlight
-
-"
-" FUNCTIONS
-"
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    en
-    return ''
+function! s:align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+        Tabularize/|/l1
+        normal! 0
+        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
 endfunction
+
+" }}}
+
+" {{{ → [ Other ] 
+
+au BufWinLeave ?* mkview
+au BufWinEnter ?* silent loadview
+
+" }}}
+
+" vim: set fdm=marker fmr={{{,}}} fdl=0 tw=80:

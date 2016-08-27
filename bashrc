@@ -113,3 +113,5 @@ if ! shopt -oq posix; then
 fi
 
 export EDITOR=/usr/bin/vim
+
+stty -ixon
