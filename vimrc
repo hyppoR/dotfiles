@@ -62,7 +62,7 @@ set directory=~/tmp,/var/tmp,/tmp
 
 set pastetoggle=<F2>
 
-let mapleader=","
+" let mapleader=","
 
 noremap <leader>r :source ~/.vimrc<CR>
 
@@ -172,6 +172,13 @@ autocmd filetype python
     \ set shiftwidth=4 |
     \ set textwidth=79 |
     \ set fileformat=unix |
+
+autocmd filetype javascript 
+    \ setl ts=2 |
+    \ setl sts=2 | 
+    \ setl sw=2 |
+
+autocmd filetype scss set ts=2 sts=2 sw=2
 
 " }}}
 

@@ -25,3 +25,12 @@
 [submodule "vim/bundle/vim-tagbar"]
 	path = vim/bundle/vim-tagbar
 	url = https://github.com/majutsushi/tagbar
+[submodule "vim/bundle/vim-vue"]
+	path = vim/bundle/vim-vue
+	url = https://github.com/posva/vim-vue.git
+[submodule "vim/bundle/vim-emmet"]
+	path = vim/bundle/vim-emmet
+	url = https://github.com/mattn/emmet-vim.git
+[submodule "vim/bundle/vim-ruby"]
+	path = vim/bundle/vim-ruby
+	url = https://github.com/vim-ruby/vim-ruby
