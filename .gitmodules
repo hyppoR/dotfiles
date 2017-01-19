@@ -27,7 +27,7 @@
 	url = https://github.com/majutsushi/tagbar
 [submodule "vim/bundle/vim-vue"]
 	path = vim/bundle/vim-vue
-	url = https://github.com/posva/vim-vue.git
+    url = https://github.com/darthmall/vim-vue.git
 [submodule "vim/bundle/vim-emmet"]
 	path = vim/bundle/vim-emmet
 	url = https://github.com/mattn/emmet-vim.git
