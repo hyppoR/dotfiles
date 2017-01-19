@@ -23,17 +23,16 @@
 " → [ General ] {{{
 
 set nocompatible " stay Vimproved 8-)
+syntax on
+filetype plugin indent on
 
 " load pathogen, i put pathogen in the bundle directory for easier maintenance  
 source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
-filetype plugin indent on
-
 " load :Man command to use man inside vim
 runtime! ftplugin/man.vim 
 
-syntax on
 colorscheme desert
 
 set autowrite
@@ -62,8 +61,6 @@ set directory=~/tmp,/var/tmp,/tmp
 
 set pastetoggle=<F2>
 
-" let mapleader=","
-
 noremap <leader>r :source ~/.vimrc<CR>
 
 inoremap èè <Esc>
@@ -86,6 +83,9 @@ noremap <silent> &C :tabmove 0<CR>
 noremap <silent> &R :tabmove $<CR>
 
 noremap wvn :vnew<CR>
+
+noremap <S-q> :CtrlPTag<cr>
+noremap <C-q> :CtrlPBufTag<cr>
 
 " }}}
 
@@ -162,6 +162,22 @@ endfunction
 nnoremap <silent> yo  :call TemporaryPaste()<CR>o
 nnoremap <silent> yO  :call TemporaryPaste()<CR>O
 
+"
+" create subdirectories if they don't exist when using :e command
+"
+function s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+        let dir=fnamemodify(a:file, ':h')
+        if !isdirectory(dir)
+            call mkdir(dir, 'p')
+        endif
+    endif
+endfunction
+augroup BWCCreateDir
+    autocmd!
+    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END
+
 " }}}
 
 " {{{ → [ Filetypes ]
@@ -174,6 +190,11 @@ autocmd filetype python
     \ set fileformat=unix |
 
 autocmd filetype javascript 
+    \ setl ts=2 |
+    \ setl sts=2 | 
+    \ setl sw=2 |
+
+autocmd filetype ruby 
     \ setl ts=2 |
     \ setl sts=2 | 
     \ setl sw=2 |
@@ -224,12 +245,15 @@ function! s:align()
     endif
 endfunction
 
+let g:ctrlp_extensions = ['tag', 'buffertag']
 " }}}
 
 " {{{ → [ Other ] 
 
 au BufWinLeave ?* mkview
 au BufWinEnter ?* silent loadview
+
+set tags+=gems.tags
 
 " }}}
 
